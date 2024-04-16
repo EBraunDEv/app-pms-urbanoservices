@@ -1,0 +1,94 @@
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model Admin {
+   id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  name     String
+}
+
+model cidadao {
+   id       Int      @id @default(autoincrement())
+  name              String?   
+  cpf               String?   @unique 
+  n_instalacao      String?   @unique 
+  telefone          String?   
+  endereco          String?   
+  n_casa            String?   
+  bairro            String?   
+  ponto_referencia  String?   
+  data_cadastro     DateTime? @default(now()) 
+  email             String?   @unique 
+  password          String?   
+}
+
+model servicos {
+   id       Int      @id @default(autoincrement())
+  tipo_servico      String?  
+ 
+}
+
+model secretarias {
+   id       Int      @id @default(autoincrement())
+  nome             String?   @unique
+  users            users[]
+}
+
+model agendamentos {
+   id       Int      @id @default(autoincrement())
+  chamados           Int?   // número do chamado
+  status              String?   
+  bairro              String?
+  endereco_agendamento String?   
+  n_agendamento       String?   //numero da residencia
+  ponto_referencia    String?   
+  tipo_servico        String?   //se e limpeza de fossa ou de caixa de esgoto
+  cidadao_cpf         String?   
+  name                String?   
+  telefone            String?   
+  observacao          String?   
+  motorista           String?   
+  obs_motorista       String?   
+  veiculo             String?   
+  dataAbertura        String?
+  dataAgendamento    String?  
+  dataRemarcacao      String?
+  dataExecucao       String? 
+  localidade          String?   // URBANO OU INTERIOR
+}
+
+model motorista {
+   id       Int      @id @default(autoincrement())
+  nome             String?   
+  cnh              String?   
+  telefone         String?   
+}
+
+model veiculo {
+   id       Int      @id @default(autoincrement())
+  placa            String?   
+  modelo           String?   
+}
+
+model users {
+   id       Int      @id @default(autoincrement())
+  nome             String?   
+  setor            String?   
+  email            String?   
+  password         String?   
+  secretarias      secretarias? @relation(fields: [setor], references: [nome], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model localidades {
+   id       Int      @id @default(autoincrement())
+  nome             String?   
+}
